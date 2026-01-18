@@ -21,7 +21,7 @@ export const Sidebar: React.FC = () => {
         <p className="text-xs text-slate-500 mt-1 pl-10">Intelligence Layer</p>
       </div>
 
-      <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         <NavLink to="/" className={navClass}>
           <LayoutDashboard size={20} />
           <span className="font-medium">Dashboard</span>
@@ -50,17 +50,17 @@ export const Sidebar: React.FC = () => {
           <Clock size={20} />
           <span className="font-medium">Tempo Integral</span>
         </NavLink>
-
-        <div className="mt-auto pt-4 border-t border-slate-100">
-          <NavLink to="/configuracoes" className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${isActive ? 'bg-indigo-50 text-indigo-600 font-medium' : 'text-slate-500 hover:text-slate-800'
-            }`
-          }>
-            <Settings size={20} />
-            <span className="font-medium">Configurações</span>
-          </NavLink>
-        </div>
       </nav>
+
+      <div className="p-4 border-t border-slate-100">
+        <NavLink to="/configuracoes" className={({ isActive }) =>
+          `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${isActive ? 'bg-indigo-50 text-indigo-600 font-medium' : 'text-slate-500 hover:text-slate-800'
+          }`
+        }>
+          <Settings size={20} />
+          <span className="font-medium">Configurações</span>
+        </NavLink>
+      </div>
     </aside>
   );
 };
