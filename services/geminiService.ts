@@ -5,9 +5,49 @@ const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
 
 export const auditStudentDataWithGemini = async (students: StudentRecord[]): Promise<AuditIssue[]> => {
-  if (!apiKey) {
-    console.error("API Key not found");
-    return [];
+  // Fallback to Mock Data if no API Key is present
+  if (!apiKey || apiKey === 'PLACEHOLDER_API_KEY') {
+    console.warn("Using Mock Gemini Response (No valid API Key found)");
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate AI processing delay
+
+    return [
+      {
+        recordId: "102",
+        studentName: "Maria Oliveira",
+        field: "CPF",
+        issueType: "INVALID_FORMAT",
+        description: "CPF com todos os dígitos iguais ou formato inválido (000.000.000-00).",
+        severity: Severity.CRITICAL,
+        suggestedAction: "Solicitar documento original e corrigir no ERP."
+      },
+      {
+        recordId: "102",
+        studentName: "Maria Oliveira",
+        field: "Deficiência / Laudo",
+        issueType: "MISSING_DOC",
+        description: "Aluno marcado com deficiência mas sem laudo anexado.",
+        severity: Severity.HIGH,
+        suggestedAction: "Anexar laudo médico ou desmarcar opção de deficiência."
+      },
+      {
+        recordId: "103",
+        studentName: "Pedro Santos",
+        field: "Grade / Idade",
+        issueType: "AGE_MISMATCH",
+        description: "Idade (16 anos) incompatível com a etapa de ensino (Creche).",
+        severity: Severity.CRITICAL,
+        suggestedAction: "Verificar data de nascimento ou enturmação."
+      },
+      {
+        recordId: "104",
+        studentName: "Ana Costa",
+        field: "CPF",
+        issueType: "DUPLICATE",
+        description: "CPF duplicado com o aluno João Silva (ID 101).",
+        severity: Severity.HIGH,
+        suggestedAction: "Verificar qual aluno possui o CPF correto."
+      }
+    ];
   }
 
   const model = "gemini-3-flash-preview";
@@ -54,18 +94,29 @@ export const auditStudentDataWithGemini = async (students: StudentRecord[]): Pro
 
     const responseText = response.text;
     if (!responseText) return [];
-    
+
     return JSON.parse(responseText) as AuditIssue[];
 
   } catch (error) {
     console.error("Gemini Audit Error:", error);
-    return [];
+    // Return mock data on error as well to ensure demo works
+    return [
+      {
+        recordId: "ERROR",
+        studentName: "Sistema",
+        field: "API Connection",
+        issueType: "CONNECTION_ERROR",
+        description: "Não foi possível conectar à IA. Exibindo dados de exemplo.",
+        severity: Severity.LOW,
+        suggestedAction: "Verifique sua conexão ou API Key."
+      }
+    ];
   }
 };
 
 export const generateSaebIntervention = async (
-  grade: string, 
-  subject: string, 
+  grade: string,
+  subject: string,
   weakness: string
 ): Promise<QuizQuestion[]> => {
   if (!apiKey) {
@@ -74,7 +125,7 @@ export const generateSaebIntervention = async (
   }
 
   const model = "gemini-3-flash-preview";
-  
+
   const prompt = `
     Crie um mini-simulado de intervenção pedagógica para alunos do ${grade}.
     Foco na disciplina: ${subject}.
@@ -112,7 +163,7 @@ export const generateSaebIntervention = async (
 
     const responseText = response.text;
     if (!responseText) return [];
-    
+
     return JSON.parse(responseText) as QuizQuestion[];
 
   } catch (error) {
