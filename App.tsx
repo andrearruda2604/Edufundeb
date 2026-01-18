@@ -8,6 +8,7 @@ import { FinancialProjectionCalc } from './components/FinancialProjection';
 import { SaebPredictor } from './components/SaebPredictor';
 import { FullTimeManager } from './components/FullTimeManager';
 import { ExpenseOptimizer } from './components/ExpenseOptimizer';
+import { Settings } from './components/Settings';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
               <Route path="/projecao" element={<FinancialProjectionCalc />} />
               <Route path="/saeb" element={<SaebPredictor />} />
               <Route path="/integral" element={<FullTimeManager />} />
+              <Route path="/configuracoes" element={<Settings />} />
             </Routes>
           </div>
         </main>

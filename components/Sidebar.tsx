@@ -4,10 +4,9 @@ import { LayoutDashboard, ShieldAlert, Calculator, BookOpenCheck, Settings, Grad
 
 export const Sidebar: React.FC = () => {
   const navClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
-      isActive
-        ? 'bg-indigo-600 text-white shadow-md'
-        : 'text-slate-600 hover:bg-slate-100'
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 ${isActive
+      ? 'bg-indigo-600 text-white shadow-md'
+      : 'text-slate-600 hover:bg-slate-100'
     }`;
 
   return (
@@ -54,10 +53,13 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="p-4 border-t border-slate-100">
-        <button className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-800 transition-colors w-full">
+        <NavLink to="/configuracoes" className={({ isActive }) =>
+          `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${isActive ? 'bg-indigo-50 text-indigo-600 font-medium' : 'text-slate-500 hover:text-slate-800'
+          }`
+        }>
           <Settings size={20} />
           <span className="font-medium">Configurações</span>
-        </button>
+        </NavLink>
       </div>
     </aside>
   );
